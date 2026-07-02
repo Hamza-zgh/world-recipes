@@ -1,9 +1,10 @@
 # 🌍 World Recipes — Global Culinary Discovery Platform
 
 ![Symfony](https://img.shields.io/badge/Symfony-7.2-black?logo=symfony)
-![PHP](https://img.shields.io/badge/PHP-8.2-blue?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?logo=mysql)
-![Doctrine](https://img.shields.io/badge/Doctrine-ORM-green)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap)
+![Doctrine](https://img.shields.io/badge/Doctrine-ORM-FC6A31?logo=doctrine)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A full-featured **Symfony 7.2** web application for discovering and exploring authentic recipes from around the world. Built with modern PHP 8.2 attributes, Doctrine ORM, and a custom Bootstrap 5 UI.
