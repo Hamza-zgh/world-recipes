@@ -1,0 +1,60 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_title %}Add New Menu - Admin{% endblock %}
+
+{% block admin_actions %}
+    <a href="{{ path('app_admin_menus') }}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+{% endblock %}
+
+{% block admin_content %}
+    <div class="admin-section">
+        {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
+        <div class="form-group">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.user) }}
+            {{ form_widget(form.user) }}
+            {{ form_errors(form.user) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.recipes) }}
+            {{ form_widget(form.recipes) }}
+            <small class="text-muted">Hold Ctrl (Cmd on Mac) to select multiple recipes</small>
+            {{ form_errors(form.recipes) }}
+        </div>
+
+        <div class="form-note">
+            <i class="fas fa-info-circle"></i>
+            Total calories will be calculated automatically based on selected recipes.
+        </div>
+
+        <div class="form-actions">
+            {{ form_widget(form.save) }}
+            <a href="{{ path('app_admin_menus') }}" class="btn btn-outline">
+                Cancel
+            </a>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <style>
+        /* Keep the same styling as before */
+        select[multiple] {
+            height: auto;
+            min-height: 150px;
+        }
+    </style>
+{% endblock %}

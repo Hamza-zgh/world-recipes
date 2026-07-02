@@ -1,0 +1,332 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Explore World Cuisines - WorldRecipes{% endblock %}
+
+
+{% block body %}
+    <!-- Explore Hero -->
+    <section class="explore-hero">
+        <div class="explore-hero-background"></div>
+        <div class="container">
+            <div class="explore-hero-content">
+                <div class="explore-hero-text">
+                    <div class="passport-stamp explore-stamp">
+                        <span class="stamp-text">Global Discovery</span>
+                        <i class="fas fa-stamp"></i>
+                    </div>
+
+                    <h1 class="explore-hero-title">Explore World Cuisines</h1>
+                    <p class="explore-hero-description">
+                        Your culinary passport to {{ countryData|length }} countries, {{ totalRecipeCount }}+ authentic recipes,
+                        and thousands of flavor combinations waiting to be discovered.
+                    </p>
+
+                    <!-- Search Bar -->
+                    <form method="get" action="{{ path('app_explore') }}" class="explore-search-form">
+                        <div class="search-container">
+                            <div class="search-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <input type="text"
+                                   name="search"
+                                   value="{{ searchTerm }}"
+                                   placeholder="Search countries, regions, or cuisines..."
+                                   class="search-input">
+                            <button type="submit" class="search-button">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="explore-hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">{{ countryData|length }}</span>
+                            <span class="stat-card-label">Countries</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-utensil-spoon"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">{{ totalRecipeCount }}+</span>
+                            <span class="stat-card-label">Recipes</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">{{ regions|length }}</span>
+                            <span class="stat-card-label">Regions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters & Controls -->
+    <section class="explore-filters section-light">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <h3 class="filter-title"><i class="fas fa-filter"></i> Filter by Region</h3>
+                    <div class="filter-buttons">
+                        <a href="{{ path('app_explore', {'region': 'all', 'search': searchTerm, 'sort': selectedSort}) }}"
+                           class="filter-btn {% if selectedRegion == 'all' %}active{% endif %}">
+                            All Regions
+                        </a>
+                        {% for region in regions %}
+                            <a href="{{ path('app_explore', {'region': region, 'search': searchTerm, 'sort': selectedSort}) }}"
+                               class="filter-btn {% if selectedRegion == region %}active{% endif %}">
+                                {{ region }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title"><i class="fas fa-sort"></i> Sort By</h3>
+                    <div class="sort-options">
+                        <a href="{{ path('app_explore', {'region': selectedRegion, 'search': searchTerm, 'sort': 'popular'}) }}"
+                           class="sort-btn {% if selectedSort == 'popular' %}active{% endif %}">
+                            <i class="fas fa-fire"></i> Most Recipes
+                        </a>
+                        <a href="{{ path('app_explore', {'region': selectedRegion, 'search': searchTerm, 'sort': 'name_asc'}) }}"
+                           class="sort-btn {% if selectedSort == 'name_asc' %}active{% endif %}">
+                            <i class="fas fa-sort-alpha-down"></i> A-Z
+                        </a>
+                        <a href="{{ path('app_explore', {'region': selectedRegion, 'search': searchTerm, 'sort': 'name_desc'}) }}"
+                           class="sort-btn {% if selectedSort == 'name_desc' %}active{% endif %}">
+                            <i class="fas fa-sort-alpha-up"></i> Z-A
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Region Stats -->
+    <section class="region-stats section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Global Distribution</span>
+                <h2>Cuisines by Region</h2>
+                <p class="section-description">Discover culinary diversity across the world's regions</p>
+            </div>
+
+            <div class="region-grid">
+                {% for stat in regionStats %}
+                    <div class="region-card">
+                        <div class="region-card-header">
+                            <div class="region-icon">
+                                <i class="fas fa-{{
+                                stat.region == 'Europe' ? 'globe-europe' :
+                                stat.region == 'Asia' ? 'globe-asia' :
+                                stat.region == 'North Africa' ? 'sun' :
+                                stat.region == 'Americas' ? 'globe-americas' :
+                                'globe'
+                                }}"></i>
+                            </div>
+                            <h3>{{ stat.region }}</h3>
+                        </div>
+                        <div class="region-card-body">
+                            <div class="region-stat">
+                                <span class="region-stat-number">{{ stat.countryCount }}</span>
+                                <span class="region-stat-label">Countries</span>
+                            </div>
+                            <a href="{{ path('app_explore', {'region': stat.region}) }}" class="region-explore-link">
+                                Explore <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Country Grid -->
+    <section class="explore-countries section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Culinary Passport</span>
+                <h2>Browse All Countries</h2>
+                <p class="section-description">Click on any country to explore its traditional recipes</p>
+            </div>
+
+            {% if countryData|length > 0 %}
+                <div class="country-grid">
+                    {% for data in countryData %}
+                        <a href="#" class="country-card-link">
+                            <div class="country-card">
+                                <div class="country-card-header">
+                                    <div class="country-flag-large">
+                                        {{ data.country.flag }}
+                                    </div>
+                                    <div class="country-card-image">
+                                        <img src="{{ asset('uploads/countries/' ~ data.country.cuisineImage) }}"
+                                             alt="{{ data.country.name }} Cuisine"
+                                             onerror="this.src='https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                                        <div class="country-overlay"></div>
+                                    </div>
+                                    <div class="country-card-badge">
+                                        <span class="badge badge-region">{{ data.country.region }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="country-card-body">
+                                    <h3 class="country-card-title">{{ data.country.name }}</h3>
+                                    <p class="country-card-description">{{ data.country.description|length > 100 ? data.country.description|slice(0, 100) ~ '...' : data.country.description }}</p>
+
+                                    <div class="country-stats">
+                                        <div class="country-stat">
+                                            <i class="fas fa-utensil-spoon"></i>
+                                            <div class="country-stat-content">
+                                                <span class="country-stat-number">{{ data.recipeCount }}</span>
+                                                <span class="country-stat-label">Recipes</span>
+                                            </div>
+                                        </div>
+                                        <div class="country-stat">
+                                            <i class="fas fa-fire"></i>
+                                            <div class="country-stat-content">
+                                                <span class="country-stat-number">{{ data.avgCalories }}</span>
+                                                <span class="country-stat-label">Avg Kcal</span>
+                                            </div>
+                                        </div>
+                                        <div class="country-stat">
+                                            <i class="fas fa-clock"></i>
+                                            <div class="country-stat-content">
+                                                <span class="country-stat-number">{{ data.avgTime }}</span>
+                                                <span class="country-stat-label">Avg Min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if data.recipeTitles|length > 0 %}
+                                        <div class="country-recipes-preview">
+                                            <h4><i class="fas fa-utensils"></i> Popular Recipes:</h4>
+                                            <div class="recipe-tags">
+                                                {% for recipeTitle in data.recipeTitles %}
+                                                    <span class="recipe-tag">
+                                        {{ recipeTitle|length > 20 ? recipeTitle|slice(0, 20) ~ '...' : recipeTitle }}
+                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="country-card-footer">
+                            <span class="explore-country-btn">
+                                Explore Cuisine <i class="fas fa-arrow-right"></i>
+                            </span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3>No countries found</h3>
+                    <p>Try adjusting your search or filter criteria</p>
+                    <a href="{{ path('app_explore') }}" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Reset Filters
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta section">
+        <div class="cta-background"></div>
+        <div class="container">
+            <div class="cta-content">
+                <div class="passport-cta">
+                    <div class="passport-cover-small">
+                        <div class="passport-title">Ready to</div>
+                        <div class="passport-subtitle">Start Cooking?</div>
+                    </div>
+                </div>
+
+                <div class="cta-text">
+                    <h2>Begin Your Global Culinary Journey Today</h2>
+                    <p>Join thousands of food explorers discovering authentic recipes from around the world.</p>
+
+                    <div class="cta-buttons">
+                        <a href="{{ path('app_register') }}" class="btn btn-primary btn-cta-large">
+                            <i class="fas fa-passport"></i> Get Your Free Passport
+                        </a>
+                        <a href="{{ path('app_home') }}" class="btn btn-outline btn-light">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                    </div>
+
+                    <div class="cta-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Access {{ totalRecipeCount }}+ recipes</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Smart calorie tracking</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Personal menu planning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // Search form enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const searchForm = document.querySelector('.explore-search-form');
+
+            // Auto-submit on Enter key
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        searchForm.submit();
+                    }
+                });
+            }
+
+            // Image fallback
+            document.querySelectorAll('.country-card-image img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                });
+            });
+
+            // Country card hover effect
+            document.querySelectorAll('.country-card-link').forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.querySelector('.explore-country-btn').style.transform = 'translateX(5px)';
+                });
+
+                link.addEventListener('mouseleave', function() {
+                    this.querySelector('.explore-country-btn').style.transform = 'translateX(0)';
+                });
+            });
+        });
+    </script>
+{% endblock %}

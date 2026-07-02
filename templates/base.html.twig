@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WorldRecipes - Your Passport to Global Cuisine{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<!-- Navigation - Will be overridden by child templates -->
+{% block navbar %}
+    {% include 'includes/navbar.html.twig' %}
+{% endblock %}
+
+<!-- Main Content -->
+{% block body %}{% endblock %}
+
+<!-- Footer - Common for all pages -->
+{% block footer %}
+    {% include 'includes/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

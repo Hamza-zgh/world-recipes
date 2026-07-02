@@ -1,0 +1,123 @@
+{# templates/includes/navbar.html.twig #}
+
+<!-- Navigation -->
+	<nav class="navbar"> <div class="container nav-container">
+		<a href="{{ path('app_home') }}" class="logo">
+			<div class="logo-icon">
+				<i class="fas fa-passport"></i>
+			</div>
+			<span class="logo-text">World<span class="logo-highlight">Recipes</span>
+			</span>
+		</a>
+
+		<div class="nav-links">
+			<a href="{{ path('app_home') }}" class="nav-item {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
+				<i class="fas fa-home"></i>
+				Home
+			</a>
+			<a href="{{ path('app_explore') }}" class="nav-item {% if 'app_explore' in app.request.attributes.get('_route') %}active{% endif %}">
+				<i class="fas fa-globe-americas"></i>
+				Explore
+			</a>
+			<a href="{{ path('app_recipes') }}" class="nav-item {% if 'app_recipe' in app.request.attributes.get('_route') %}active{% endif %}">
+				<i class="fas fa-utensils"></i>
+				Recipes
+			</a>
+
+			{% if is_granted('ROLE_USER') %}
+      {# Future features: Menu Planner & Calculator #}
+				{# <a href="{{ path('app_menu_index') }}" class="nav-item">
+				              <i class="fas fa-calendar-alt"></i> Menu Planner
+				              </a> #}
+				{# <a href="{{ path('app_calculator') }}" class="nav-item">
+				              <i class="fas fa-calculator"></i> Calculator
+				              </a> #}
+			{% endif %}
+
+			{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('app_admin_dashboard') }}" class="nav-item {% if 'admin' in app.request.attributes.get('_route') %}active{% endif %}">
+					<i class="fas fa-tachometer-alt"></i>
+					Admin
+				</a>
+			{% endif %}
+		</div>
+
+		<div class="nav-actions">
+			{% if app.user %}
+				<!-- User Profile Dropdown -->
+				<div class="user-dropdown">
+					<button class="user-menu-btn">
+						{% if app.user.profileImage %}
+							<img src="{{ asset('uploads/profile/' ~ app.user.profileImage) }}" alt="{{ app.user.fullName }}" class="user-avatar">
+						{% else %}
+							<div class="user-avatar" style="background: #4299e1; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold;">
+								{{ app.user.fullName|first|upper }}
+							</div>
+						{% endif %}
+						<span class="user-name">{{ app.user.fullName }}</span>
+						<i class="fas fa-chevron-down"></i>
+					</button>
+					<div class="user-dropdown-menu">
+						<div class="user-info">
+							{% if app.user.profileImage %}
+								<img src="{{ asset('uploads/profile/' ~ app.user.profileImage) }}" alt="{{ app.user.fullName }}" class="user-avatar-large">
+							{% else %}
+								<div class="user-avatar-large" style="background: #4299e1; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 1.5rem;">
+									{{ app.user.fullName|first|upper }}
+								</div>
+							{% endif %}
+							<div class="user-details">
+								<strong>{{ app.user.fullName }}</strong>
+								<small>{{ app.user.email }}</small>
+								<span class="user-role">{{ app.user.role == 'ROLE_ADMIN' ? 'Admin' : 'User' }}</span>
+							</div>
+						</div>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item">
+							<i class="fas fa-user"></i>
+							My Profile
+						</a>
+						<a href="#" class="dropdown-item">
+							<i class="fas fa-cog"></i>
+							Settings
+						</a>
+						<a href="#" class="dropdown-item">
+							<i class="fas fa-utensils"></i>
+							My Recipes
+						</a>
+						<a href="#" class="dropdown-item">
+							<i class="fas fa-clipboard-list"></i>
+							My Menus
+						</a>
+						<div class="dropdown-divider"></div>
+						{% if is_granted('ROLE_ADMIN') %}
+							<a href="{{ path('app_admin_dashboard') }}" class="dropdown-item">
+								<i class="fas fa-tachometer-alt"></i>
+								Admin Dashboard
+							</a>
+							<div class="dropdown-divider"></div>
+						{% endif %}
+						<a href="{{ path('app_logout') }}" class="dropdown-item logout">
+							<i class="fas fa-sign-out-alt"></i>
+							Logout
+						</a>
+					</div>
+				</div>
+			{% else %}
+				<!-- Show login/register for guests -->
+				<a href="{{ path('app_login') }}" class="btn btn-outline">
+					<i class="fas fa-sign-in-alt"></i>
+					Login
+				</a>
+				<a href="{{ path('app_register') }}" class="btn btn-primary">
+					<i class="fas fa-user-plus"></i>
+					Start Free
+				</a>
+			{% endif %}
+		</div>
+
+		<button class="mobile-menu-btn">
+			<i class="fas fa-bars"></i>
+		</button>
+	</div>
+</nav>

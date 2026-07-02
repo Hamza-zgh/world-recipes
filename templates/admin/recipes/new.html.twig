@@ -1,0 +1,310 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_title %}Add New Recipe - Admin{% endblock %}
+
+{% block admin_actions %}
+    <a href="{{ path('app_admin_recipes') }}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+{% endblock %}
+
+{% block admin_content %}
+    <div class="admin-section">
+        <form method="POST" class="admin-form" enctype="multipart/form-data" id="recipe-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="title">Recipe Title *</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <select id="country" name="country" class="form-control" required>
+                        <option value="">Select a country</option>
+                        {% for country in countries %}
+                            <option value="{{ country.id }}">{{ country.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3"
+                          placeholder="Brief description of the recipe..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="instructions">Instructions *</label>
+                <textarea id="instructions" name="instructions" class="form-control" rows="6"
+                          placeholder="Step-by-step instructions..." required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preparationTime">Preparation Time (minutes)</label>
+                    <input type="number" id="preparationTime" name="preparationTime" class="form-control" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="cookingTime">Cooking Time (minutes)</label>
+                    <input type="number" id="cookingTime" name="cookingTime" class="form-control" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="servings">Servings</label>
+                    <input type="number" id="servings" name="servings" class="form-control" min="1">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty" name="difficulty" class="form-control">
+                        <option value="">Select difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Recipe Image</label>
+                    <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
+                    <small class="text-muted">Recommended size: 800x600px, max 2MB. Formats: JPG, PNG, GIF</small>
+                </div>
+            </div>
+
+            <!-- Ingredients Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-carrot"></i> Ingredients</h3>
+                    <button type="button" class="btn btn-sm btn-primary" id="add-ingredient">
+                        <i class="fas fa-plus"></i> Add Ingredient
+                    </button>
+                </div>
+
+                <div class="ingredients-container" id="ingredients-container">
+                    <!-- Ingredients will be added here dynamically -->
+                    <div class="ingredient-row">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ingredient</label>
+                                <select name="ingredients[]" class="form-control ingredient-select">
+                                    <option value="">Select an ingredient</option>
+                                    {% for ingredient in ingredients %}
+                                        <option value="{{ ingredient.id }}" data-unit="{{ ingredient.unit }}">
+                                            {{ ingredient.name }} ({{ ingredient.caloriesPerUnit }} cal/{{ ingredient.unit }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.01" name="quantities[]" class="form-control" placeholder="Amount">
+                                    <span class="unit-display">-</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Notes (Optional)</label>
+                                <input type="text" name="notes[]" class="form-control" placeholder="e.g., chopped, sliced">
+                            </div>
+
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="button" class="btn btn-danger remove-ingredient" style="margin-top: 8px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-note">
+                    <i class="fas fa-info-circle"></i>
+                    Total calories will be calculated automatically based on ingredients.
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Create Recipe
+                </button>
+                <a href="{{ path('app_admin_recipes') }}" class="btn btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .form-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ingredients-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .ingredient-row {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .ingredient-row:hover {
+            border-color: #cbd5e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .ingredient-row .form-row {
+            align-items: flex-end;
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .unit-display {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            background: #e2e8f0;
+            padding: 0 8px;
+            border-radius: 0 4px 4px 0;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            color: #4a5568;
+            font-size: 0.9rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .input-with-unit input {
+            padding-right: 50px;
+        }
+
+        .remove-ingredient {
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('ingredients-container');
+            const addButton = document.getElementById('add-ingredient');
+            const ingredientSelects = container.querySelectorAll('.ingredient-select');
+
+            // Update unit display when ingredient is selected
+            function updateUnitDisplay(selectElement) {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const unit = selectedOption.getAttribute('data-unit') || '-';
+                const unitDisplay = selectElement.closest('.ingredient-row').querySelector('.unit-display');
+                unitDisplay.textContent = unit;
+            }
+
+            // Initialize unit displays
+            ingredientSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    updateUnitDisplay(this);
+                });
+                updateUnitDisplay(select);
+            });
+
+            // Add new ingredient row
+            addButton.addEventListener('click', function() {
+                const firstRow = container.querySelector('.ingredient-row');
+                const newRow = firstRow.cloneNode(true);
+
+                // Clear values
+                newRow.querySelector('select').selectedIndex = 0;
+                newRow.querySelector('input[type="number"]').value = '';
+                newRow.querySelector('input[type="text"]').value = '';
+                newRow.querySelector('.unit-display').textContent = '-';
+
+                // Add remove functionality
+                const removeBtn = newRow.querySelector('.remove-ingredient');
+                removeBtn.addEventListener('click', function() {
+                    newRow.remove();
+                });
+
+                // Add ingredient select change handler
+                const select = newRow.querySelector('.ingredient-select');
+                select.addEventListener('change', function() {
+                    updateUnitDisplay(this);
+                });
+
+                container.appendChild(newRow);
+
+                // Scroll to new row
+                newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+
+            // Remove ingredient row
+            container.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-ingredient')) {
+                    const row = e.target.closest('.ingredient-row');
+                    if (container.querySelectorAll('.ingredient-row').length > 1) {
+                        row.remove();
+                    } else {
+                        // If it's the last row, just clear it
+                        row.querySelector('select').selectedIndex = 0;
+                        row.querySelector('input[type="number"]').value = '';
+                        row.querySelector('input[type="text"]').value = '';
+                        row.querySelector('.unit-display').textContent = '-';
+                    }
+                }
+            });
+
+            // Form validation
+            const form = document.getElementById('recipe-form');
+            form.addEventListener('submit', function(e) {
+                const ingredients = container.querySelectorAll('.ingredient-select');
+                let hasValidIngredient = false;
+
+                ingredients.forEach(select => {
+                    if (select.value && select.closest('.ingredient-row').querySelector('input[type="number"]').value) {
+                        hasValidIngredient = true;
+                    }
+                });
+
+                if (!hasValidIngredient) {
+                    e.preventDefault();
+                    alert('Please add at least one ingredient with a quantity.');
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}

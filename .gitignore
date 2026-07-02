@@ -1,0 +1,60 @@
+# Symfony .gitignore
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database (local dev)
+*.sqlite
+*.sqlite3
+
+# Uploads (user-generated content)
+/public/uploads/
+/public/recipe_images/
+
+# Cache & sessions
+/var/cache/
+/var/log/
+/var/sessions/
+
+# Composer
+composer.phar
+
+# PHPUnit
+.phpunit.result.cache
+/phpunit.xml
+
+# Symfony CLI
+.symfony/

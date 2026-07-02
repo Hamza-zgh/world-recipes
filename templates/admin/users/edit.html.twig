@@ -1,0 +1,116 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_title %}Edit User - Admin{% endblock %}
+
+{% block admin_content %}
+    <div class="admin-section">
+        <form method="POST" class="admin-form">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" value="{{ user.fullName }}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" class="form-control">
+                    <option value="ROLE_USER" {{ user.role == 'ROLE_USER' ? 'selected' : '' }}>User</option>
+                    <option value="ROLE_ADMIN" {{ user.role == 'ROLE_ADMIN' ? 'selected' : '' }}>Administrator</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{{ path('app_admin_users') }}" class="btn btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .admin-form {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+
+        .btn-primary:hover {
+            background: #3182ce;
+            border-color: #3182ce;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #4a5568;
+            border-color: #e2e8f0;
+        }
+
+        .btn-outline:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+    </style>
+{% endblock %}

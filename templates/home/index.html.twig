@@ -1,0 +1,545 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WorldRecipes - Your Passport to Global Cuisine{% endblock %}
+
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background-pattern"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="passport-stamp">
+                    <span class="stamp-text">Global Cuisine</span>
+                    <i class="fas fa-stamp"></i>
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="hero-title-line">Travel the World.</span>
+                    <span class="hero-title-line">Eat Smart.</span>
+                    <span class="hero-title-line accent">Live Well.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Your passport to {{ countryCount }}+ countries, {{ recipeCount }}+ authentic recipes, and smart calorie tracking.
+                    Discover global flavors while mastering your nutrition journey.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{{ path('app_register') }}" class="btn btn-primary btn-hero">
+                        <i class="fas fa-compass"></i> Begin Your Journey
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <i class="fas fa-play-circle"></i> See How It Works
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number">{{ countryCount }}+</span>
+                            <span class="stat-label">Countries</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-utensil-spoon"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number">{{ recipeCount }}+</span>
+                            <span class="stat-label">Recipes</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Calorie Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="passport-card">
+                    <div class="passport-cover">
+                        <div class="passport-title">WorldRecipes</div>
+                        <div class="passport-subtitle">Culinary Passport</div>
+                        <div class="passport-emblem">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                    </div>
+                    <div class="passport-stamps">
+                        {% for country in featuredCountries|slice(0, 3) %}
+                            <div class="stamp">
+                                <span>{{ country.country.name }}</span>
+                                <i class="fas fa-{{ random(['pizza-slice', 'fish', 'pepper-hot', 'wheat-alt', 'mortar-pestle', 'ice-cream']) }}"></i>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if featuredCountries|length > 0 %}
+                    {% set randomCountry = random(featuredCountries) %}
+                    <div class="floating-recipe">
+                        <div class="recipe-image" style="background-image:url('{{ asset('uploads/countries/' ~ randomCountry.country.cuisineImage) }}')"></div>
+                        <div class="recipe-info">
+                            <div class="recipe-header">
+                                <span class="recipe-flag">{{ randomCountry.country.flag }}</span>
+                                <h4>{{ randomCountry.country.name }} Cuisine</h4>
+                            </div>
+                            <div class="recipe-calories">
+                                <div class="calorie-visual">
+                                    <div class="calorie-bar" style="width: {{ min(randomCountry.avgCalories / 1000 * 100, 100) }}%"></div>
+                                </div>
+                                <span class="calorie-text">{{ randomCountry.avgCalories }} kcal avg</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="calorie-compass">
+                    <div class="compass-dial">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="compass-info">
+                        <h4><i class="fas fa-calculator"></i> Smart Kcal</h4>
+                        <p>AI-powered calorie intelligence</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Your Culinary Companion</span>
+                <h2>More Than Recipes, It's a Journey</h2>
+                <p class="section-description">Three pillars that make WorldRecipes your ultimate food and health assistant</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card feature-card-recipe">
+                    <div class="feature-card-inner">
+                        <div class="feature-icon">
+                            <div class="icon-bg"></div>
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="feature-title">Culinary Passport</h3>
+                        <p>Explore authentic dishes with cultural stories, traditional techniques, and regional variations. Each recipe is a stamp in your culinary passport.</p>
+                        <div class="feature-cta">
+                            <a href="#" class="feature-link">
+                                Browse Recipes <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card feature-card-calculator">
+                    <div class="feature-card-inner">
+                        <div class="feature-icon">
+                            <div class="icon-bg"></div>
+                            <i class="fas fa-fire-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Calorie Compass</h3>
+                        <p>Navigate nutrition with our intelligent calculator. See calories visually, track macros, and get smart suggestions for balanced eating.</p>
+                        <div class="calorie-demo">
+                            <div class="calorie-visual-small">
+                                <div class="flame-icon"><i class="fas fa-fire"></i></div>
+                                <span class="calorie-demo-text">285 kcal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card feature-card-menu">
+                    <div class="feature-card-inner">
+                        <div class="feature-icon">
+                            <div class="icon-bg"></div>
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3 class="feature-title">Menu Journal</h3>
+                        <p>Plan weekly meals, adjust portions, and track your eating journey. Save favorite combinations and create your personal cookbook.</p>
+                        <div class="feature-cta">
+                            <a href="#" class="feature-link">
+                                Start Planning <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Simple Journey</span>
+                <h2 class="text-light">How WorldRecipes Works</h2>
+                <p class="section-description text-light">From discovery to plate in four beautiful steps</p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">
+                        <span>1</span>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content step-content-discovery">
+                        <div class="step-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="step-text">
+                            <h3>Discover Your Cravings</h3>
+                            <p>Browse recipes by country, cuisine, or mood. Each dish comes with cultural background and preparation stories.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">
+                        <span>2</span>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content step-content-create">
+                        <div class="step-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="step-text">
+                            <h3>Cook & Create</h3>
+                            <p>Follow step-by-step instructions with ingredient measurements. Our system auto-calculates nutrition as you adjust servings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">
+                        <span>3</span>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content step-content-plan">
+                        <div class="step-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="step-text">
+                            <h3>Plan Your Menu</h3>
+                            <p>Build weekly menus with our visual planner. See calorie totals, nutritional balance, and get smart suggestions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">
+                        <span>4</span>
+                    </div>
+                    <div class="step-content step-content-track">
+                        <div class="step-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="step-text">
+                            <h3>Track & Transform</h3>
+                            <p>Monitor your eating habits with beautiful insights. Receive gentle nudges toward healthier choices while enjoying global flavors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- World Cuisines -->
+    <section class="cuisines section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Taste the World</span>
+                <h2>Global Culinary Adventures</h2>
+                <p class="section-description">Journey through culinary traditions from every corner of the globe</p>
+            </div>
+
+            <!-- Dynamic Filter Buttons -->
+            <div class="cuisine-filter" id="cuisineFilter">
+                <button class="filter-btn active" data-filter="all">All Journeys</button>
+                {% set regions = [] %}
+                {% for data in featuredCountries %}
+                    {% if data.country.region not in regions %}
+                        {% set regions = regions|merge([data.country.region]) %}
+                        <button class="filter-btn" data-filter="{{ data.country.region }}">{{ data.country.region }}</button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Dynamic Country Cards -->
+            <div class="cuisine-grid" id="cuisineGrid">
+                {% for data in featuredCountries %}
+                    <div class="cuisine-card" data-region="{{ data.country.region }}">
+                        <div class="cuisine-header">
+                            <div class="cuisine-overlay"></div>
+                            <img src="{{ asset('uploads/countries/' ~ data.country.cuisineImage) }}"
+                                 alt="{{ data.country.name }} Cuisine"
+                                 class="cuisine-image">
+                            <div class="cuisine-country">
+                                <span class="country-flag">{{ data.country.flag }}</span>
+                                <span class="country-name">{{ data.country.name }}</span>
+                            </div>
+                            <!-- Remove mood tags -->
+                        </div>
+                        <div class="cuisine-body">
+                            <h3 class="cuisine-title">{{ data.country.name }} Cuisine</h3>
+                            <p class="cuisine-description">{{ data.country.description }}</p>
+                            <div class="cuisine-stats">
+                                <div class="stat">
+                                    <i class="fas fa-utensil-spoon"></i>
+                                    <span>{{ data.recipeCount }} Recipes</span>
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-fire"></i>
+                                    <span>Avg {{ data.avgCalories }} kcal</span>
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Avg {{ data.avgTime }} min</span>
+                                </div>
+                            </div>
+                            <div class="cuisine-badges">
+                                {% for recipeTitle in data.recipeTitles %}
+                                    {% set badgeClass = 'badge-curry' %}
+                                    {% set badgeIcon = 'fas fa-mortar-pestle' %}
+
+                                    {% if loop.index == 1 %}
+                                        {% set badgeClass = 'badge-curry' %}
+                                        {% set badgeIcon = 'fas fa-mortar-pestle' %}
+                                    {% elseif loop.index == 2 %}
+                                        {% set badgeClass = 'badge-tandoor' %}
+                                        {% set badgeIcon = 'fas fa-fire' %}
+                                    {% else %}
+                                        {% set badgeClass = 'badge-street' %}
+                                        {% set badgeIcon = 'fas fa-utensils' %}
+                                    {% endif %}
+
+                                    <span class="badge {{ badgeClass }}">
+                                    <i class="{{ badgeIcon }}"></i>
+                                    {{ recipeTitle|length > 15 ? recipeTitle|slice(0, 15) ~ '...' : recipeTitle }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="section-cta">
+                <a href="#" class="btn btn-secondary">
+                    <i class="fas fa-globe"></i> Explore All {{ countryCount }}+ Countries
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calorie Calculator -->
+    <section class="calculator section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Nutrition Intelligence</span>
+                <h2 class="text-light">Your Calorie Compass</h2>
+                <p class="section-description text-light">Navigate nutrition with our visual calorie calculator</p>
+            </div>
+
+            <div class="calculator-container">
+                <div class="calculator-demo">
+                    <div class="calorie-dashboard">
+                        <div class="dashboard-header">
+                            <h3><i class="fas fa-fire"></i> Meal Calculator</h3>
+                            <span class="dashboard-subtitle">Visual Nutrition Tracking</span>
+                        </div>
+
+                        <div class="ingredient-list">
+                            <div class="ingredient-item">
+                                <div class="ingredient-info">
+                                    <span class="ingredient-name">Chicken Breast</span>
+                                    <span class="ingredient-quantity">200g</span>
+                                </div>
+                                <div class="calorie-display">
+                                    <div class="calorie-visual-bar" style="width: 40%">
+                                        <span class="calorie-value">330 kcal</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ingredient-item">
+                                <div class="ingredient-info">
+                                    <span class="ingredient-name">Brown Rice</span>
+                                    <span class="ingredient-quantity">150g</span>
+                                </div>
+                                <div class="calorie-display">
+                                    <div class="calorie-visual-bar" style="width: 30%">
+                                        <span class="calorie-value">195 kcal</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ingredient-item">
+                                <div class="ingredient-info">
+                                    <span class="ingredient-name">Broccoli</span>
+                                    <span class="ingredient-quantity">100g</span>
+                                </div>
+                                <div class="calorie-display">
+                                    <div class="calorie-visual-bar" style="width: 10%">
+                                        <span class="calorie-value">34 kcal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calorie-total">
+                            <div class="total-label">Total Calories</div>
+                            <div class="total-value">
+                                <i class="fas fa-fire total-icon"></i>
+                                <span class="total-number">559</span>
+                                <span class="total-unit">kcal</span>
+                            </div>
+                            <div class="total-note">Balanced Meal ✓</div>
+                        </div>
+
+                        <div class="calorie-breakdown">
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">Protein</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 45%"></div>
+                                </div>
+                                <div class="breakdown-value">45g</div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">Carbs</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 40%"></div>
+                                </div>
+                                <div class="breakdown-value">40g</div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">Fat</div>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 15%"></div>
+                                </div>
+                                <div class="breakdown-value">15g</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calculator-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>How We Calculate</h3>
+                        <p>Our AI analyzes ingredients, preparation methods, and portion sizes to give you accurate calorie estimates.</p>
+                        <div class="formula-box">
+                            total_calories = Σ(ingredient × calories_per_gram)
+                        </div>
+                    </div>
+
+                    <div class="info-card info-card-warning">
+                        <div class="info-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Important Note</h3>
+                        <p>Calorie values are estimates for educational purposes. Actual values may vary based on specific ingredients and preparation.</p>
+                        <div class="disclaimer-note">
+                            <i class="fas fa-stethoscope"></i> Not medical advice. Consult professionals for dietary guidance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta section">
+        <div class="cta-background"></div>
+        <div class="container">
+            <div class="cta-content">
+                <div class="passport-cta">
+                    <div class="passport-cover-small">
+                        <div class="passport-title">Your Culinary</div>
+                        <div class="passport-subtitle">Passport Awaits</div>
+                    </div>
+                </div>
+
+                <div class="cta-text">
+                    <h2>Begin Your Global Culinary Journey Today</h2>
+                    <p>Join thousands discovering world cuisines while mastering nutrition. Your first recipe is on us.</p>
+
+                    <div class="cta-buttons">
+                        <a href="{{ path('app_register') }}" class="btn btn-primary btn-cta-large">
+                            <i class="fas fa-passport"></i> Get Your Free Passport
+                        </a>
+                        <a href="#" class="btn btn-outline btn-light">
+                            <i class="fas fa-play-circle"></i> Watch 2-min Tour
+                        </a>
+                    </div>
+
+                    <div class="cta-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>No credit card needed</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ recipeCount }}+ free recipes to start</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Cancel anytime</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // Country Filter Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const cuisineCards = document.querySelectorAll('.cuisine-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+
+                    // Filter cards
+                    cuisineCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-region') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                card.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

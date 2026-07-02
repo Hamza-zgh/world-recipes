@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_title %}Edit Country - Admin{% endblock %}
+
+{% block admin_actions %}
+    <a href="{{ path('app_admin_countries') }}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+{% endblock %}
+
+{% block admin_content %}
+    <div class="admin-section">
+        <form method="POST" class="admin-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Country Name *</label>
+                <input type="text" id="name" name="name" class="form-control"
+                       value="{{ country.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input type="text" id="region" name="region" class="form-control"
+                       value="{{ country.region }}"
+                       placeholder="e.g., Europe, Asia, Africa">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="flag">Flag Image</label>
+                    {% if country.flag %}
+                        <div class="current-image">
+                            <img src="{{ asset('uploads/flags/' ~ country.flag) }}" alt="{{ country.name }} flag"
+                                 style="max-width: 100px; border-radius: 4px; margin-bottom: 10px;">
+                            <div class="form-check">
+                                <input type="checkbox" id="remove_flag" name="remove_flag" class="form-check-input">
+                                <label for="remove_flag" class="form-check-label">Remove current flag</label>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="flag" name="flag" class="form-control-file" accept="image/*">
+                    <small class="text-muted">Leave empty to keep current flag</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="cuisineImage">Cuisine Image</label>
+                    {% if country.cuisineImage %}
+                        <div class="current-image">
+                            <img src="{{ asset('uploads/countries/' ~ country.cuisineImage) }}" alt="{{ country.name }} cuisine"
+                                 style="max-width: 200px; border-radius: 8px; margin-bottom: 10px;">
+                            <div class="form-check">
+                                <input type="checkbox" id="remove_cuisine_image" name="remove_cuisine_image" class="form-check-input">
+                                <label for="remove_cuisine_image" class="form-check-label">Remove current image</label>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="cuisineImage" name="cuisineImage" class="form-control-file" accept="image/*">
+                    <small class="text-muted">Leave empty to keep current image</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="4">{{ country.description }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{{ path('app_admin_countries') }}" class="btn btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

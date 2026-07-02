@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block admin_title %}Add New User - Admin{% endblock %}
+
+{% block admin_content %}
+    <div class="admin-section">
+        <form method="POST" class="admin-form">
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role *</label>
+                <select id="role" name="role" class="form-control" required>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_ADMIN">Administrator</option>
+                </select>
+            </div>
+
+            <div class="form-note">
+                <i class="fas fa-info-circle"></i>
+                A temporary password will be generated and shown after creation.
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Create User
+                </button>
+                <a href="{{ path('app_admin_users') }}" class="btn btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

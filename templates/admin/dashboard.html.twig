@@ -1,0 +1,647 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard - WorldRecipes{% endblock %}
+
+{% block navbar %}
+    {% include 'includes/navbar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="admin-container">
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-crown"></i> Admin Panel</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ path('app_admin_dashboard') }}" class="sidebar-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{{ path('app_admin_users') }}" class="sidebar-item">
+                    <i class="fas fa-users"></i> Users
+                    <span class="sidebar-badge">{{ stats.users.total }}</span>
+                </a>
+                <a href="{{ path('app_admin_countries') }}" class="sidebar-item">
+                    <i class="fas fa-globe"></i> Countries
+                    <span class="sidebar-badge">{{ stats.countries.total }}</span>
+                </a>
+                <a href="{{ path('app_admin_recipes') }}" class="sidebar-item">
+                    <i class="fas fa-utensils"></i> Recipes
+                    <span class="sidebar-badge">{{ stats.recipes.total }}</span>
+                </a>
+                <a href="{{ path('app_admin_ingredients') }}" class="sidebar-item">
+                    <i class="fas fa-carrot"></i> Ingredients
+                    <span class="sidebar-badge">{{ stats.ingredients.total }}</span>
+                </a>
+                <a href="{{ path('app_admin_menus') }}" class="sidebar-item">
+                    <i class="fas fa-clipboard-list"></i> Menus
+                    <span class="sidebar-badge">{{ stats.menus.total }}</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1 class="admin-title">Admin Dashboard</h1>
+                <p class="admin-subtitle">Manage your WorldRecipes platform</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.users.total }}</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="stat-detail">{{ stats.users.admins }} admins</span>
+                        <span class="stat-detail">{{ stats.users.regular }} regular</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.countries.total }}</h3>
+                        <p>Countries</p>
+                    </div>
+                    <div class="stat-footer">
+                        {% for region in stats.countries.by_region|slice(0, 2) %}
+                            <span class="stat-detail">{{ region.region }}: {{ region.count }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.recipes.total }}</h3>
+                        <p>Recipes</p>
+                    </div>
+                    <div class="stat-footer">
+                        {% for difficulty in stats.recipes.by_difficulty|slice(0, 2) %}
+                            <span class="stat-detail">{{ difficulty.difficulty }}: {{ difficulty.count }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ stats.menus.total }}</h3>
+                        <p>Menus</p>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="stat-detail">Created by users</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                </div>
+
+                <div class="activity-grid">
+                    <div class="activity-card">
+                        <h3>Recent Users</h3>
+                        <div class="activity-list">
+                            {% for user in stats.users.recent %}
+                                <div class="activity-item">
+                                    <img src="{{ user.profileImageUrl }}" alt="{{ user.fullName }}" class="activity-avatar">
+                                    <div class="activity-details">
+                                        <strong>{{ user.fullName }}</strong>
+                                        <small>{{ user.email }}</small>
+                                        <span class="activity-time">{{ user.createdAt|date('Y-m-d') }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="activity-card">
+                        <h3>Recent Recipes</h3>
+                        <div class="activity-list">
+                            {% for recipe in stats.recipes.recent %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-utensils"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <strong>{{ recipe.title }}</strong>
+                                        <small>{{ recipe.country.name }}</small>
+                                        <span class="activity-time">{{ recipe.createdAt|date('Y-m-d') }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="{{ path('app_admin_users') }}" class="quick-action">
+                        <div class="action-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Add New User</h4>
+                            <p>Create a new user account</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ path('app_admin_countries') }}" class="quick-action">
+                        <div class="action-icon">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Add Country</h4>
+                            <p>Add a new cuisine country</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ path('app_admin_recipes') }}" class="quick-action">
+                        <div class="action-icon">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Add Recipe</h4>
+                            <p>Create a new recipe</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ path('app_admin_ingredients') }}" class="quick-action">
+                        <div class="action-icon">
+                            <i class="fas fa-carrot"></i>
+                        </div>
+                        <div class="action-content">
+                            <h4>Add Ingredient</h4>
+                            <p>Add new ingredient data</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Admin Dashboard Styles */
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: #1a202c;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            background: #2d3748;
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .sidebar-item i {
+            width: 24px;
+            margin-right: 10px;
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            background: #4a5568;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: 30px;
+            background: #f7fafc;
+        }
+
+        .admin-header {
+            margin-bottom: 30px;
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            color: #2d3748;
+            margin: 0 0 5px 0;
+        }
+
+        .admin-subtitle {
+            color: #718096;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: #4299e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            margin: 0 0 5px 0;
+            color: #2d3748;
+        }
+
+        .stat-content p {
+            color: #718096;
+            margin: 0;
+        }
+
+        .stat-footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-detail {
+            font-size: 0.85rem;
+            color: #718096;
+            background: #f7fafc;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .activity-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #4a5568;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details strong {
+            display: block;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .activity-details small {
+            color: #718096;
+            font-size: 0.85rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-action {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+
+        .quick-action:hover {
+            border-color: #4299e1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.15);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: #4299e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .action-content h4 {
+            margin: 0 0 5px 0;
+            color: #2d3748;
+        }
+
+        .action-content p {
+            color: #718096;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* User Dropdown Styles */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu-btn:hover {
+            border-color: #4299e1;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .user-dropdown:hover .user-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .user-info {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .user-avatar-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-details strong {
+            display: block;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .user-details small {
+            color: #718096;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e2e8f0;
+            color: #4a5568;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 10px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: #4a5568;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: #f7fafc;
+        }
+
+        .dropdown-item.logout {
+            color: #e53e3e;
+        }
+
+        .dropdown-item.logout:hover {
+            background: #fed7d7;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                padding: 15px 0;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 15px;
+            }
+
+            .sidebar-item {
+                white-space: nowrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}

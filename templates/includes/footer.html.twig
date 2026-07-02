@@ -1,0 +1,84 @@
+{# templates/includes/footer.html.twig #}
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-main">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <i class="fas fa-passport"></i>
+                    World<span class="logo-highlight">Recipes</span>
+                </div>
+                <p class="footer-description">
+                    Your passport to global cuisine and smart nutrition. An educational platform for food lovers worldwide.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Pinterest">
+                        <i class="fab fa-pinterest-p"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ path('app_explore') }}"><i class="fas fa-chevron-right"></i> All Countries</a></li>
+                    <li><a href="{{ path('app_recipes') }}"><i class="fas fa-chevron-right"></i> All Recipes</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Seasonal Specials</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Chef's Corner</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Tools</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Calorie Calculator</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Menu Planner</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Nutrition Tracker</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Shopping List</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Community</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> User Stories</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Cooking Challenges</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Recipe Contests</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-disclaimer">
+            <div class="disclaimer-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="disclaimer-text">
+                <strong>Educational Purpose:</strong> WorldRecipes is designed for culinary education and nutritional awareness. Calorie values are estimates based on standard nutritional data. This platform does not provide medical advice. For personalized dietary guidance, please consult a healthcare professional.
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>WorldRecipes © {{ "now"|date("Y") }} | Culinary Passport to Global Flavors & Smart Nutrition</p>
+            <div class="footer-links-bottom">
+                <a href="#">Privacy Policy</a>
+                <span class="divider">•</span>
+                <a href="#">Terms of Service</a>
+                <span class="divider">•</span>
+                <a href="#">Cookie Policy</a>
+                <span class="divider">•</span>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </div>
+</footer>

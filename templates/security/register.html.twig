@@ -1,0 +1,334 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - WorldRecipes | Your Culinary Passport{% endblock %}
+
+{% block navbar %}
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{{ path('app_home') }}" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-passport"></i>
+                </div>
+                <span class="logo-text">World<span class="logo-highlight">Recipes</span></span>
+            </a>
+
+            <div class="nav-links">
+                <a href="{{ path('app_home') }}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-item"><i class="fas fa-globe-americas"></i> Explore</a>
+                <a href="#" class="nav-item"><i class="fas fa-utensils"></i> Recipes</a>
+                <a href="{{ path('app_register') }}" class="nav-item active"><i class="fas fa-user-plus"></i> Register</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="{{ path('app_login') }}" class="btn btn-outline">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <!-- Registration Section -->
+    <section class="auth-section">
+        <div class="auth-background"></div>
+        <div class="auth-container">
+            <div class="auth-hero">
+                <div class="auth-hero-logo">
+                    <div class="auth-hero-icon">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h1 class="auth-hero-title">Join <span class="highlight">WorldRecipes</span></h1>
+                </div>
+
+                <h2 class="auth-hero-subtitle">Begin Your Global Culinary Journey</h2>
+                <p class="auth-hero-description">
+                    Create your free account to unlock 50+ authentic recipes, build personalized menus,
+                    and track your nutrition with our intelligent calorie calculator.
+                </p>
+
+                <div class="auth-hero-features">
+                    <div class="auth-feature">
+                        <div class="auth-feature-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="auth-feature-content">
+                            <h4>Explore Global Cuisines</h4>
+                            <p>Access authentic recipes from 85+ countries with cultural insights</p>
+                        </div>
+                    </div>
+
+                    <div class="auth-feature">
+                        <div class="auth-feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="auth-feature-content">
+                            <h4>Smart Nutrition Tracking</h4>
+                            <p>Monitor calories and macros with our visual calculator</p>
+                        </div>
+                    </div>
+
+                    <div class="auth-feature">
+                        <div class="auth-feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="auth-feature-content">
+                            <h4>Personal Menu Planner</h4>
+                            <p>Plan weekly meals and save your favorite combinations</p>
+                        </div>
+                    </div>
+
+                    <div class="auth-feature">
+                        <div class="auth-feature-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="auth-feature-content">
+                            <h4>Free Forever Plan</h4>
+                            <p>50 free recipes, no credit card required, cancel anytime</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-card auth-card-register">
+                <div class="auth-card-header">
+                    <h2 class="auth-card-title">Create Account</h2>
+                    <p class="auth-card-subtitle">Start your culinary journey in 30 seconds</p>
+                </div>
+
+                {% for flashError in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ flashError }}
+                    </div>
+                {% endfor %}
+
+                {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
+
+                <div class="form-group">
+                    <label for="{{ registrationForm.fullName.vars.id }}" class="form-label">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    {{ form_widget(registrationForm.fullName, {'attr': {'class': 'form-control'}}) }}
+                    {% if registrationForm.fullName.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {{ form_errors(registrationForm.fullName) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ registrationForm.email.vars.id }}" class="form-label">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+                    {% if registrationForm.email.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {{ form_errors(registrationForm.email) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ registrationForm.plainPassword.first.vars.id }}" class="form-label">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'At least 8 characters'}}) }}
+                    <button type="button" class="password-toggle toggle-password1">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    {% if registrationForm.plainPassword.first.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {{ form_errors(registrationForm.plainPassword.first) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ registrationForm.plainPassword.second.vars.id }}" class="form-label">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Repeat your password'}}) }}
+                    <button type="button" class="password-toggle toggle-password2">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="form-check form-group">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                    <label for="{{ registrationForm.agreeTerms.vars.id }}" class="form-check-label">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                    {% if registrationForm.agreeTerms.vars.errors|length > 0 %}
+                        <div class="form-error">
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">
+                    <i class="fas fa-user-plus"></i> Create My Free Account
+                </button>
+
+                {{ form_end(registrationForm) }}
+
+                <div class="auth-divider">
+                    <span>Or sign up with</span>
+                </div>
+
+                <div class="social-auth">
+                    <button type="button" class="social-auth-btn google">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button type="button" class="social-auth-btn facebook">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                </div>
+
+                <div class="auth-switch">
+                    <span>Already have an account?</span>
+                    <a href="{{ path('app_login') }}">Sign in here</a>
+                </div>
+
+                <div class="auth-form-footer">
+                    <p><i class="fas fa-shield-alt"></i> Your data is protected with 256-bit encryption</p>
+                    <p><i class="fas fa-gift"></i> Get 50 free recipes instantly after registration</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <i class="fas fa-passport"></i>
+                        World<span class="logo-highlight">Recipes</span>
+                    </div>
+                    <p class="footer-description">
+                        Your passport to global cuisine and smart nutrition. An educational platform for food lovers worldwide.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Pinterest">
+                            <i class="fab fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Recipe Directory</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cuisine Map</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Seasonal Specials</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Chef's Corner</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Account</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ path('app_login') }}"><i class="fas fa-chevron-right"></i> Sign In</a></li>
+                        <li><a href="{{ path('app_register') }}"><i class="fas fa-chevron-right"></i> Create Account</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Reset Password</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Account Settings</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cookie Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-disclaimer">
+                <div class="disclaimer-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="disclaimer-text">
+                    <strong>Educational Purpose:</strong> WorldRecipes is designed for culinary education and nutritional awareness. Calorie values are estimates based on standard nutritional data. This platform does not provide medical advice. For personalized dietary guidance, please consult a healthcare professional.
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>WorldRecipes © 2024 | Culinary Passport to Global Flavors & Smart Nutrition</p>
+                <div class="footer-links-bottom">
+                    <a href="#">Privacy Policy</a>
+                    <span class="divider">•</span>
+                    <a href="#">Terms of Service</a>
+                    <span class="divider">•</span>
+                    <a href="#">Cookie Policy</a>
+                    <span class="divider">•</span>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block javascripts %}
+        <script>
+            // Password toggle functionality for registration
+            document.querySelectorAll('.password-toggle').forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    const inputId = index === 0 ? '{{ registrationForm.plainPassword.first.vars.id }}' : '{{ registrationForm.plainPassword.second.vars.id }}';
+                    const passwordInput = document.getElementById(inputId);
+                    const icon = this.querySelector('i');
+
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+
+            // Form validation feedback
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('.auth-form');
+                const inputs = form.querySelectorAll('.form-control');
+
+                inputs.forEach(input => {
+                    // Add validation styling
+                    input.addEventListener('blur', function() {
+                        if (this.value.trim() !== '') {
+                            this.classList.add('filled');
+                        } else {
+                            this.classList.remove('filled');
+                        }
+                    });
+
+                    // Check initial state
+                    if (input.value.trim() !== '') {
+                        input.classList.add('filled');
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

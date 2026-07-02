@@ -1,0 +1,322 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Explore Recipes - WorldRecipes{% endblock %}
+
+
+{% block body %}
+    <!-- Recipes Hero -->
+    <section class="recipes-hero">
+        <div class="recipes-hero-background"></div>
+        <div class="container">
+            <div class="recipes-hero-content">
+                <div class="recipes-hero-text">
+                    <div class="passport-stamp recipes-stamp">
+                        <span class="stamp-text">Culinary Library</span>
+                        <i class="fas fa-stamp"></i>
+                    </div>
+
+                    <h1 class="recipes-hero-title">Discover World Recipes</h1>
+                    <p class="recipes-hero-description">
+                        Browse {{ totalRecipes }}+ authentic recipes from around the world.
+                        From quick meals to gourmet dishes, find your next culinary adventure.
+                    </p>
+
+                    <!-- Search Bar -->
+                    <form method="get" action="{{ path('app_recipes') }}" class="recipes-search-form">
+                        <div class="search-container">
+                            <div class="search-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <input type="text"
+                                   name="search"
+                                   value="{{ searchTerm }}"
+                                   placeholder="Search recipes, ingredients, or countries..."
+                                   class="search-input">
+                            <button type="submit" class="search-button">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="recipes-hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-utensil-spoon"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">{{ totalRecipes }}+</span>
+                            <span class="stat-card-label">Recipes</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">98%</span>
+                            <span class="stat-card-label">Calorie Accuracy</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <span class="stat-card-number">{{ quickRecipes|length }}+</span>
+                            <span class="stat-card-label">Quick Meals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Recipes Section -->
+    <section class="quick-recipes section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Need Inspiration?</span>
+                <h2>Quick & Easy Recipes</h2>
+                <p class="section-description">Perfect for busy days - all under 30 minutes</p>
+            </div>
+
+            <div class="quick-recipes-grid">
+                {% for recipe in quickRecipes %}
+                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="quick-recipe-card">
+                        <div class="quick-recipe-image">
+                            {% if recipe.image %}
+                                <img src="{{ asset('uploads/recipes/' ~ recipe.image) }}"
+                                     alt="{{ recipe.title }}"
+                                     onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80'">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80"
+                                     alt="{{ recipe.title }}">
+                            {% endif %}
+                            <div class="quick-recipe-overlay">
+                                <span class="recipe-time"><i class="fas fa-clock"></i> {{ recipe.preparationTime }} min</span>
+                            </div>
+                        </div>
+                        <div class="quick-recipe-content">
+                            <h3 class="quick-recipe-title">{{ recipe.title }}</h3>
+                            <div class="quick-recipe-meta">
+                                <span class="recipe-country">{{ recipe.country.flag }} {{ recipe.country.name }}</span>
+                                <span class="recipe-calories"><i class="fas fa-fire"></i> {{ recipe.totalCalories|default('N/A') }} kcal</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Low Calorie Recipes -->
+    <section class="low-calorie-recipes section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Healthy Choices</span>
+                <h2>Low Calorie Favorites</h2>
+                <p class="section-description">Delicious meals under 400 calories</p>
+            </div>
+
+            <div class="low-calorie-grid">
+                {% for recipe in lowCalorieRecipes %}
+                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="low-calorie-card">
+                        <div class="calorie-badge">
+                            <i class="fas fa-fire"></i> {{ recipe.totalCalories|default('N/A') }} kcal
+                        </div>
+                        <div class="low-calorie-image">
+                            {% if recipe.image %}
+                                <img src="{{ asset('uploads/recipes/' ~ recipe.image) }}"
+                                     alt="{{ recipe.title }}"
+                                     onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80'">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200&q=80"
+                                     alt="{{ recipe.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="low-calorie-content">
+                            <h3>{{ recipe.title }}</h3>
+                            <p>{{ recipe.description|length > 80 ? recipe.description|slice(0, 80) ~ '...' : recipe.description }}</p>
+                            <div class="low-calorie-meta">
+                                <span class="difficulty-badge {{ recipe.difficulty|lower }}">{{ recipe.difficulty }}</span>
+                                <span class="recipe-country">{{ recipe.country.flag }} {{ recipe.country.name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters & Controls -->
+    <section class="recipe-filters section-light">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <h3 class="filter-title"><i class="fas fa-filter"></i> Filter Recipes</h3>
+                    <div class="filter-options">
+                        <!-- Country Filter -->
+                        <div class="filter-select">
+                            <select name="country" class="filter-select-input" onchange="this.form.submit()" form="filters-form">
+                                <option value="all" {% if selectedCountry == 'all' %}selected{% endif %}>All Countries</option>
+                                {% for country in countries %}
+                                    <option value="{{ country.id }}" {% if selectedCountry == country.id %}selected{% endif %}>
+                                        {{ country.flag }} {{ country.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Difficulty Filter -->
+                        <div class="filter-select">
+                            <select name="difficulty" class="filter-select-input" onchange="this.form.submit()" form="filters-form">
+                                <option value="all" {% if selectedDifficulty == 'all' %}selected{% endif %}>All Difficulties</option>
+                                {% for difficulty in difficulties %}
+                                    <option value="{{ difficulty }}" {% if selectedDifficulty == difficulty %}selected{% endif %}>
+                                        {{ difficulty|title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title"><i class="fas fa-sort"></i> Sort By</h3>
+                    <div class="sort-options">
+                        <a href="{{ path('app_recipes', {'country': selectedCountry, 'difficulty': selectedDifficulty, 'search': searchTerm, 'sort': 'newest'}) }}"
+                           class="sort-btn {% if selectedSort == 'newest' %}active{% endif %}">
+                            <i class="fas fa-star"></i> Newest
+                        </a>
+                        <a href="{{ path('app_recipes', {'country': selectedCountry, 'difficulty': selectedDifficulty, 'search': searchTerm, 'sort': 'calories_asc'}) }}"
+                           class="sort-btn {% if selectedSort == 'calories_asc' %}active{% endif %}">
+                            <i class="fas fa-fire"></i> Low Calories
+                        </a>
+                        <a href="{{ path('app_recipes', {'country': selectedCountry, 'difficulty': selectedDifficulty, 'search': searchTerm, 'sort': 'time_asc'}) }}"
+                           class="sort-btn {% if selectedSort == 'time_asc' %}active{% endif %}">
+                            <i class="fas fa-clock"></i> Quickest
+                        </a>
+                        <a href="{{ path('app_recipes', {'country': selectedCountry, 'difficulty': selectedDifficulty, 'search': searchTerm, 'sort': 'name_asc'}) }}"
+                           class="sort-btn {% if selectedSort == 'name_asc' %}active{% endif %}">
+                            <i class="fas fa-sort-alpha-down"></i> A-Z
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden form for filter changes -->
+            <form id="filters-form" method="get" action="{{ path('app_recipes') }}" style="display: none;">
+                <input type="hidden" name="search" value="{{ searchTerm }}">
+                <input type="hidden" name="sort" value="{{ selectedSort }}">
+            </form>
+        </div>
+    </section>
+
+    <!-- All Recipes Grid -->
+    <section class="all-recipes section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Culinary Collection</span>
+                <h2>All Recipes ({{ recipes|length }})</h2>
+                <p class="section-description">Browse our complete recipe collection</p>
+            </div>
+
+            {% if recipes|length > 0 %}
+                <div class="recipe-grid">
+                    {% for recipe in recipes %}
+                        <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="recipe-card">
+                            <div class="recipe-card-image">
+                                {% if recipe.image %}
+                                    <img src="{{ asset('uploads/recipes/' ~ recipe.image) }}"
+                                         alt="{{ recipe.title }}"
+                                         onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80'">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80"
+                                         alt="{{ recipe.title }}">
+                                {% endif %}
+                                <div class="recipe-card-overlay">
+                                    <span class="recipe-time"><i class="fas fa-clock"></i> {{ recipe.preparationTime }} min</span>
+                                    <span class="recipe-calories-overlay"><i class="fas fa-fire"></i> {{ recipe.totalCalories|default('N/A') }} kcal</span>
+                                </div>
+                            </div>
+                            <div class="recipe-card-content">
+                                <div class="recipe-card-header">
+                                    <span class="recipe-country-flag">{{ recipe.country.flag }}</span>
+                                    <span class="recipe-difficulty {{ recipe.difficulty|lower }}">{{ recipe.difficulty }}</span>
+                                </div>
+                                <h3 class="recipe-card-title">{{ recipe.title }}</h3>
+                                <p class="recipe-card-description">{{ recipe.description|length > 100 ? recipe.description|slice(0, 100) ~ '...' : recipe.description }}</p>
+                                <div class="recipe-card-footer">
+                                    <div class="recipe-stats">
+                                        <span class="recipe-stat"><i class="fas fa-user"></i> {{ recipe.servings }} servings</span>
+                                        <span class="recipe-stat"><i class="fas fa-utensils"></i> {{ recipe.country.name }}</span>
+                                    </div>
+                                    <span class="view-recipe-btn">
+                                        View Recipe <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>No recipes found</h3>
+                    <p>Try adjusting your search or filter criteria</p>
+                    <a href="{{ path('app_recipes') }}" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Reset Filters
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search form enhancement
+            const searchInput = document.querySelector('.search-input');
+            const searchForm = document.querySelector('.recipes-search-form');
+
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        searchForm.submit();
+                    }
+                });
+            }
+
+            // Image fallback
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80';
+                });
+            });
+
+            // Recipe card hover effect
+            document.querySelectorAll('.recipe-card, .quick-recipe-card, .low-calorie-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const viewBtn = this.querySelector('.view-recipe-btn');
+                    if (viewBtn) {
+                        viewBtn.style.transform = 'translateX(5px)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    const viewBtn = this.querySelector('.view-recipe-btn');
+                    if (viewBtn) {
+                        viewBtn.style.transform = 'translateX(0)';
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Default FileUploader (don't use this directly)
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    # Specific uploader for recipes
+    app.file_uploader.recipes:
+        class: App\Service\FileUploader
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/recipes'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    # Specific uploader for country cuisine images
+    app.file_uploader.countries:
+        class: App\Service\FileUploader
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/countries'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    # Specific uploader for flags
+    app.file_uploader.flags:
+        class: App\Service\FileUploader
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/flags'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    # Specific uploader for profile images
+    app.file_uploader.profile:
+        class: App\Service\FileUploader
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/profile'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    # ALIASES - THIS IS WHAT YOU'RE MISSING!
+    # Tell Symfony which service to inject for each parameter name
+    App\Service\FileUploader $recipeUploader: '@app.file_uploader.recipes'
+    App\Service\FileUploader $countryUploader: '@app.file_uploader.countries'
+    App\Service\FileUploader $flagUploader: '@app.file_uploader.flags'
+    App\Service\FileUploader $profileUploader: '@app.file_uploader.profile'

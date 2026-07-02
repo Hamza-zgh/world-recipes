@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recipe.title }} - WorldRecipes{% endblock %}
+
+
+{% block body %}
+    <!-- Recipe Hero -->
+    <section class="recipe-show-hero">
+        <div class="recipe-show-background"></div>
+        <div class="container">
+            <div class="recipe-show-header">
+                <a href="{{ path('app_recipes', {'country': recipe.country.id}) }}" class="back-to-recipes">
+                    <i class="fas fa-arrow-left"></i> Back to Recipes
+                </a>
+
+                <div class="recipe-country-banner">
+                    <span class="country-flag-large">{{ recipe.country.flag }}</span>
+                    <span class="country-name-large">{{ recipe.country.name }} Cuisine</span>
+                </div>
+            </div>
+
+            <div class="recipe-show-content">
+                <div class="recipe-show-main">
+                    <!-- Recipe Image -->
+                    <div class="recipe-show-image">
+                        {% if recipe.image %}
+                            <img src="{{ asset('uploads/recipes/' ~ recipe.image) }}"
+                                 alt="{{ recipe.title }}"
+                                 onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600&q=80'">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600&q=80"
+                                 alt="{{ recipe.title }}">
+                        {% endif %}
+                    </div>
+
+                    <!-- Recipe Title & Description -->
+                    <div class="recipe-show-title-section">
+                        <h1 class="recipe-show-title">{{ recipe.title }}</h1>
+                        <p class="recipe-show-description">{{ recipe.description }}</p>
+
+                        <!-- Recipe Stats -->
+                        <div class="recipe-show-stats">
+                            <div class="recipe-stat-item">
+                                <div class="recipe-stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="recipe-stat-content">
+                                    <span class="recipe-stat-label">Prep Time</span>
+                                    <span class="recipe-stat-value">{{ recipe.preparationTime }} minutes</span>
+                                </div>
+                            </div>
+
+                            <div class="recipe-stat-item">
+                                <div class="recipe-stat-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="recipe-stat-content">
+                                    <span class="recipe-stat-label">Calories</span>
+                                    <span class="recipe-stat-value">{{ recipe.totalCalories|default('Calculating...') }} kcal</span>
+                                </div>
+                            </div>
+
+                            <div class="recipe-stat-item">
+                                <div class="recipe-stat-icon">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                                <div class="recipe-stat-content">
+                                    <span class="recipe-stat-label">Servings</span>
+                                    <span class="recipe-stat-value">{{ recipe.servings }} people</span>
+                                </div>
+                            </div>
+
+                            <div class="recipe-stat-item">
+                                <div class="recipe-stat-icon">
+                                    <i class="fas fa-signal"></i>
+                                </div>
+                                <div class="recipe-stat-content">
+                                    <span class="recipe-stat-label">Difficulty</span>
+                                    <span class="recipe-stat-value difficulty-{{ recipe.difficulty|lower }}">{{ recipe.difficulty }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-show-details">
+                    <!-- Ingredients Section -->
+                    <div class="recipe-ingredients-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-shopping-basket"></i> Ingredients</h2>
+                            <p class="section-subtitle">Everything you need for this recipe</p>
+                        </div>
+
+                        <div class="ingredients-list">
+                            {% for ingredient in ingredientDetails %}
+                                <div class="ingredient-item">
+                                    <div class="ingredient-name">{{ ingredient.name }}</div>
+                                    <div class="ingredient-quantity">
+                                        {{ ingredient.quantity }} {{ ingredient.unit }}
+                                        {% if ingredient.notes %}
+                                            <span class="ingredient-notes">({{ ingredient.notes }})</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ingredient-calories">{{ ingredient.calories }} kcal</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="ingredients-total">
+                            <div class="total-label">Total Calories</div>
+                            <div class="total-value">
+                                <i class="fas fa-fire"></i>
+                                <span class="total-number">{{ totalCalories }}</span>
+                                <span class="total-unit">kcal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions Section -->
+                    <div class="recipe-instructions-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-list-ol"></i> Instructions</h2>
+                            <p class="section-subtitle">Step-by-step cooking guide</p>
+                        </div>
+
+                        <div class="instructions-content">
+                            {{ recipe.instructions|nl2br }}
+                        </div>
+
+                        {% if recipe.cookingTime %}
+                            <div class="cooking-time-note">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Cooking Time:</strong> {{ recipe.cookingTime }} minutes
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Nutrition Info -->
+                    <div class="nutrition-info-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-chart-pie"></i> Nutrition Information</h2>
+                            <p class="section-subtitle">Per serving (estimated)</p>
+                        </div>
+
+                        <div class="nutrition-facts">
+                            <div class="nutrition-fact">
+                                <span class="fact-label">Calories</span>
+                                <span class="fact-value">{{ recipe.totalCalories|default('N/A') }} kcal</span>
+                            </div>
+                            <div class="nutrition-fact">
+                                <span class="fact-label">Prep Time</span>
+                                <span class="fact-value">{{ recipe.preparationTime }} min</span>
+                            </div>
+                            <div class="nutrition-fact">
+                                <span class="fact-label">Difficulty</span>
+                                <span class="fact-value">{{ recipe.difficulty }}</span>
+                            </div>
+                            <div class="nutrition-fact">
+                                <span class="fact-label">Country</span>
+                                <span class="fact-value">{{ recipe.country.flag }} {{ recipe.country.name }}</span>
+                            </div>
+                        </div>
+
+                        <div class="nutrition-disclaimer">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Note:</strong> Nutritional values are estimates. Actual values may vary based on specific ingredients and preparation methods.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Actions -->
+                <div class="recipe-actions">
+                    <a href="{{ path('app_recipes', {'country': recipe.country.id}) }}" class="btn btn-outline">
+                        <i class="fas fa-flag"></i> More {{ recipe.country.name }} Recipes
+                    </a>
+                    <button class="btn btn-primary" onclick="printRecipe()">
+                        <i class="fas fa-print"></i> Print Recipe
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-heart"></i> Save to Favorites
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function printRecipe() {
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image fallback
+            const recipeImage = document.querySelector('.recipe-show-image img');
+            if (recipeImage) {
+                recipeImage.addEventListener('error', function() {
+                    this.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600&q=80';
+                });
+            }
+        });
+    </script>
+
+    <style>
+        @media print {
+            .navbar, .footer, .recipe-actions, .back-to-recipes {
+                display: none !important;
+            }
+
+            .recipe-show-content {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+
+            .recipe-show-hero {
+                background: none !important;
+            }
+        }
+    </style>
+{% endblock %}
+
