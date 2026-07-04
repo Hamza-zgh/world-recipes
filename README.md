@@ -130,7 +130,7 @@ Public visitors can browse recipes by country, search by ingredients, filter by 
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/yourusername/world-recipes.git
+git clone https://github.com/Hamza-zgh/world-recipes.git
 cd world-recipes
 composer install
 ```
